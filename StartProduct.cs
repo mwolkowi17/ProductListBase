@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ProductBase
@@ -58,6 +59,29 @@ namespace ProductBase
                 db.SaveChanges();
             }
         }
+        
+        public static void BaseClean()
+        {
+            using (var db = new ProductBaseSet())
+               
+            {
+                List<int> numery = new List<int>();
+                var lista = db.MyBase.ToList();
+                foreach(var n in lista)
+                {
+                    numery.Add(n.ProductDefinitionId);
+
+                }
+                foreach(var n in numery)
+                {
+                    var singleBaseItem = db.MyBase
+                        .Single(b => b.ProductDefinitionId == n);
+                    db.MyBase.Remove(singleBaseItem);
+                    db.SaveChanges();
+                }
+            }
+        }
+        
 
         public static void ProductChangeName( int x, string newname)
         {
